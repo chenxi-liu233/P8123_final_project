@@ -2,7 +2,7 @@
 title: "P8123_final_project"
 author: "Chenxi Liu"
 date: "12/12/2021"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -58,14 +58,43 @@ survey_df = read_xpt(
   inner_join(t_data, by = "SEQN") %>%
   left_join(demo, by = "SEQN") %>%
   left_join(bmi_data, by = "SEQN")
-
-
 ```
 
-## Regenerate Table 1
+## Table 1. Population Characteristics in NHANES Participants With Phthalate and T Data 2011–2012 (n = 2208)
+
+\begin{tabular}{lll}
+\hline & & Weighted Median \\
+& n & (25th, 75th (Weighted \%) Percentile) \\
+\hline Age group, y & & $41(23,56)$ \\
+$6-12$ & $293(6.63)$ & \\
+12 to $<20$ & $351(12.0)$ & \\
+20 to $<40$ & $572(29.5)$ & \\
+40 to $<60$ & $507(31.6)$ & \\
+$60-80$ & $485(20.2)$ & \\
+Sex & & \\
+Female & $1098(51.3)$ & \\
+Male & $1110(48.7)$ & \\
+Race/ethnicity & & \\
+Mexican American & $277(8.82)$ & \\
+Other Hispanic & $232(7.14)$ & \\
+Non-Hispanic white & $742(64.6)$ & \\
+Non-Hispanic black & $573(12.2)$ & \\
+Other race/multiracial & $384(7.20)$ & \\
+PIR continuous & & $2.72(1.26,4.76)$ \\
+(no units) & & \\
+BMI continuous, kg/m $^{2}$ & & $26.5(22.8,31)$ \\
+Child/adolescent BMI & & \\
+$\quad$ categories $^{2}$ & & \\
+Underweight & $18(2.86)$ & \\
+Normal weight & $370(57.8)$ & \\
+Overweight & $109(17.7)$ & \\
+Obese & $141(21.6)$ & \\
+\hline
+\end{tabular}
 
 ```{r}
 table_1 = survey_df %>%
   select(SEQN, sex, age, race, BMI, child_BMI)
 ```
+
 
