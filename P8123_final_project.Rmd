@@ -29,9 +29,10 @@ demo = read_xpt(
   ) %>%
   select(SEQN, RIAGENDR, RIDAGEYR, RIDRETH1, INDFMPIR) %>%
   rename(PIR = INDFMPIR) %>%
+  drop_na() %>%
   mutate(sex = case_when(RIAGENDR == 1 ~"Male",
                          RIAGENDR == 2 ~ "Female"),
-         age = case_when(RIDAGEYR < 12 & RIAGENDR >= 6 ~ "6 – 12",
+         age = case_when(RIDAGEYR >= 6 & RIDAGEYR < 12 ~ "6 – 12",
                          RIDAGEYR >= 12 & RIDAGEYR < 20 ~ "12 to <20",
                          RIDAGEYR >= 20 & RIDAGEYR < 40 ~ "20 to <40",
                          RIDAGEYR >= 40 & RIDAGEYR < 60 ~ "40 to <60",
@@ -41,8 +42,7 @@ demo = read_xpt(
                          RIDRETH1 ==3 ~"Non-Hispanic White",
                          RIDRETH1 == 4 ~ "Non-Hispanic Black",
                          RIDRETH1 == 5 ~ "Non-Hispanic Black" )) %>%
-  select(SEQN, sex, age, race, PIR) %>%
-  drop_na()
+  select(SEQN, sex, age, race, PIR)
 
 t_data = read_xpt(
   "./data/TST_G.XPT"
@@ -62,9 +62,10 @@ survey_df = read_xpt(
 
 ```
 
-## Regenerate Tabale 1
+## Regenerate Table 1
 
 ```{r}
-
+table_1 = survey_df %>%
+  select(SEQN, sex, age, race, BMI, child_BMI)
 ```
 
