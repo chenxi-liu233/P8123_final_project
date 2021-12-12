@@ -15,14 +15,14 @@ library(tidyverse)
 bmi_data = read_xpt(
   "./data/BMX_G.XPT"
   ) %>% select (SEQN, BMXBMI, BMDBMIC) %>%
-  drop_na() %>%
   rename(BMI = BMXBMI) %>%
   mutate(child_BMI = 
            case_when(BMDBMIC == 1 ~"Underweight",
             BMDBMIC == 2 ~ "Normal",
             BMDBMIC == 3 ~ "Overweight",
             BMDBMIC == 4 ~ "Obese")) %>%
-  select(SEQN, BMI, child_BMI)
+  select(SEQN, BMI, child_BMI) %>%
+  drop_na(BMI)
 
 demo = read_xpt(
   "./data/DEMO_G.XPT"
