@@ -1,0 +1,70 @@
+---
+title: "P8123_final_project"
+author: "Chenxi Liu"
+date: "12/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(haven)
+library(tidyverse)
+```
+
+
+```{r}
+bmi_data = read_xpt(
+  "./data/BMX_G.XPT"
+  ) %>% select (SEQN, BMXBMI, BMDBMIC) %>%
+  drop_na() %>%
+  rename(BMI = BMXBMI) %>%
+  mutate(child_BMI = 
+           case_when(BMDBMIC == 1 ~"Underweight",
+            BMDBMIC == 2 ~ "Normal",
+            BMDBMIC == 3 ~ "Overweight",
+            BMDBMIC == 4 ~ "Obese")) %>%
+  select(SEQN, BMI, child_BMI)
+
+demo = read_xpt(
+  "./data/DEMO_G.XPT"
+  ) %>%
+  select(SEQN, RIAGENDR, RIDAGEYR, RIDRETH1, INDFMPIR) %>%
+  rename(PIR = INDFMPIR) %>%
+  mutate(sex = case_when(RIAGENDR == 1 ~"Male",
+                         RIAGENDR == 2 ~ "Female"),
+         age = case_when(RIDAGEYR < 12 & RIAGENDR >= 6 ~ "6 – 12",
+                         RIDAGEYR >= 12 & RIDAGEYR < 20 ~ "12 to <20",
+                         RIDAGEYR >= 20 & RIDAGEYR < 40 ~ "20 to <40",
+                         RIDAGEYR >= 40 & RIDAGEYR < 60 ~ "40 to <60",
+                         RIDAGEYR >=60 & RIDAGEYR <= 80 ~"60 - 80"),
+        race = case_when(RIDRETH1 == 1 ~ "Mexican American",
+                         RIDRETH1 == 2 ~"Other Hispanic",
+                         RIDRETH1 ==3 ~"Non-Hispanic White",
+                         RIDRETH1 == 4 ~ "Non-Hispanic Black",
+                         RIDRETH1 == 5 ~ "Non-Hispanic Black" )) %>%
+  select(SEQN, sex, age, race, PIR) %>%
+  drop_na()
+
+t_data = read_xpt(
+  "./data/TST_G.XPT"
+  ) %>%
+  drop_na() %>%
+  rename(T = LBXTST)
+
+# final merged dataset
+survey_df = read_xpt(
+  "./data/PHTHTE_G.XPT"
+  ) %>%
+  drop_na() %>%
+  inner_join(t_data, by = "SEQN") %>%
+  left_join(demo, by = "SEQN") %>%
+  left_join(bmi_data, by = "SEQN")
+
+
+```
+
+## Regenerate Tabale 1
+
+```{r}
+
+```
+
