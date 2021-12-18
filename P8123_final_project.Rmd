@@ -104,5 +104,30 @@ table_1 %>% count(race)
 table_1 %>% drop_na(child_BMI) %>% count(child_BMI) 
 ```
 
+```{r}
+prop.table(svytable(~sex, dclus1))
+```
 
+```{r}
+prop.table(svytable(~age_group, dclus1))
+```
+
+```{r}
+prop.table(svytable(~race, dclus1))
+```
+
+```{r}
+prop.table(svytable(~child_BMI, dclus1))
+```
+
+
+```{r}
+dclus1 = svydesign(id = ~SEQN, weights = ~WTSA2YR, strata =  ~strata, data = survey_df)
+
+svyquantile(~age, dclus1, c(.25, .5, .75))
+
+svyquantile(~PIR, dclus1, c(.25, .5, .75))
+
+svyquantile(~BMI, dclus1, c(.25, .5, .75))
+```
 
