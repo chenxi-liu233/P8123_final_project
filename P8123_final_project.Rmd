@@ -8,6 +8,7 @@ output: pdf_document
 ```{r setup, include=FALSE}
 library(haven)
 library(tidyverse)
+library(survey)
 ```
 
 
@@ -27,22 +28,25 @@ bmi_data = read_xpt(
 demo = read_xpt(
   "./data/DEMO_G.XPT"
   ) %>%
-  select(SEQN, RIAGENDR, RIDAGEYR, RIDRETH1, INDFMPIR) %>%
-  rename(PIR = INDFMPIR) %>%
+  select(SEQN, RIAGENDR, RIDAGEYR, RIDRETH1, INDFMPIR, SDMVPSU, SDMVSTRA) %>%
+  rename(PIR = INDFMPIR,
+         PSU = SDMVPSU,
+         strata = SDMVSTRA,
+         age = RIDAGEYR) %>%
   drop_na() %>%
   mutate(sex = case_when(RIAGENDR == 1 ~"Male",
                          RIAGENDR == 2 ~ "Female"),
-         age = case_when(RIDAGEYR >= 6 & RIDAGEYR < 12 ~ "6 – 12",
-                         RIDAGEYR >= 12 & RIDAGEYR < 20 ~ "12 to <20",
-                         RIDAGEYR >= 20 & RIDAGEYR < 40 ~ "20 to <40",
-                         RIDAGEYR >= 40 & RIDAGEYR < 60 ~ "40 to <60",
-                         RIDAGEYR >=60 & RIDAGEYR <= 80 ~"60 - 80"),
+         age_group = case_when(age >= 6 & age < 12 ~ "6 – 12",
+                         age >= 12 & age < 20 ~ "12 to <20",
+                         age >= 20 & age < 40 ~ "20 to <40",
+                         age >= 40 & age < 60 ~ "40 to <60",
+                         age >=60 & age <= 80 ~"60 - 80"),
         race = case_when(RIDRETH1 == 1 ~ "Mexican American",
                          RIDRETH1 == 2 ~"Other Hispanic",
                          RIDRETH1 ==3 ~"Non-Hispanic White",
                          RIDRETH1 == 4 ~ "Non-Hispanic Black",
                          RIDRETH1 == 5 ~ "Non-Hispanic Black" )) %>%
-  select(SEQN, sex, age, race, PIR)
+  select(SEQN, PSU, strata, sex, age_group, age, race, PIR)
 
 t_data = read_xpt(
   "./data/TST_G.XPT"
