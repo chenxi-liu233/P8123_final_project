@@ -60,7 +60,20 @@ survey_df = read_xpt(
   drop_na() %>%
   inner_join(t_data, by = "SEQN") %>%
   left_join(demo, by = "SEQN") %>%
-  left_join(bmi_data, by = "SEQN")
+  left_join(bmi_data, by = "SEQN") %>%
+  rename(MEHP = URXMHP,
+         MEHHP = URXMHH,
+         MEOHP = URXMOH,
+         MECPP = URXECP,
+         MBzP = URXMZP,
+         MBP = URXMBP,
+         MiBP = URXMIB,
+         MEP = URXMEP,
+         MCPP = URXMC1,
+         MCNP = URXCNP,
+         MCOP = URXCOP,
+         MiNP = URXMNP,
+         MnMP = URXMNM)
 ```
 
 ## Table 1. Population Characteristics in NHANES Participants With Phthalate and T Data 2011–2012 (n = 2208)
@@ -129,5 +142,199 @@ svyquantile(~age, dclus1, c(.25, .5, .75))
 svyquantile(~PIR, dclus1, c(.25, .5, .75))
 
 svyquantile(~BMI, dclus1, c(.25, .5, .75))
+```
+
+## Table 2 Creatinine Corrected Urinary Phthalate Metabolite (ng/mL) and Serum T (ng/dL) Medians (25th, 75th percentiles) by Age and Sex Categories in Weighted NHANES Data 2011–2012
+
+```{r}
+table2 = survey_df %>%
+  mutate(across(MCNP:URXMHNC, ~.x/(URXUCR*0.01))) %>%
+  select(SEQN, sex, age_group, everything())
+
+tab2 <- table2 %>%
+  group_by(sex, age_group)
+
+table2_groups = group_split(tab2)
+
+# Female 12 -20
+head(table2_groups[[1]])
+dclus2 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[1]])
+svyquantile(~MEHP, dclus2, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus2, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus2, c(.25, .5, .75))
+svyquantile(~MECPP, dclus2, c(.25, .5, .75))
+svyquantile(~MBzP, dclus2, c(.25, .5, .75))
+svyquantile(~MBP, dclus2, c(.25, .5, .75))
+svyquantile(~MiBP, dclus2, c(.25, .5, .75))
+svyquantile(~MEP, dclus2, c(.25, .5, .75))
+svyquantile(~MCPP, dclus2, c(.25, .5, .75))
+svyquantile(~MCNP, dclus2, c(.25, .5, .75))
+svyquantile(~MCOP, dclus2, c(.25, .5, .75))
+svyquantile(~MiNP, dclus2, c(.25, .5, .75))
+svyquantile(~MnMP, dclus2, c(.25, .5, .75))
+svyquantile(~T, dclus2, c(.25, .5, .75))
+
+# Female 20 - 40
+head(table2_groups[[2]])
+dclus3 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[2]])
+svyquantile(~MEHP, dclus3, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus3, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus3, c(.25, .5, .75))
+svyquantile(~MECPP, dclus3, c(.25, .5, .75))
+svyquantile(~MBzP, dclus3, c(.25, .5, .75))
+svyquantile(~MBP, dclus3, c(.25, .5, .75))
+svyquantile(~MiBP, dclus3, c(.25, .5, .75))
+svyquantile(~MEP, dclus3, c(.25, .5, .75))
+svyquantile(~MCPP, dclus3, c(.25, .5, .75))
+svyquantile(~MCNP, dclus3, c(.25, .5, .75))
+svyquantile(~MCOP, dclus3, c(.25, .5, .75))
+svyquantile(~MiNP, dclus3, c(.25, .5, .75))
+svyquantile(~MnMP, dclus3, c(.25, .5, .75))
+svyquantile(~T, dclus3, c(.25, .5, .75))
+
+# Female 40 - 60
+head(table2_groups[[3]])
+dclus4 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[3]])
+svyquantile(~MEHP, dclus4, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus4, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus4, c(.25, .5, .75))
+svyquantile(~MECPP, dclus4, c(.25, .5, .75))
+svyquantile(~MBzP, dclus4, c(.25, .5, .75))
+svyquantile(~MBP, dclus4, c(.25, .5, .75))
+svyquantile(~MiBP, dclus4, c(.25, .5, .75))
+svyquantile(~MEP, dclus4, c(.25, .5, .75))
+svyquantile(~MCPP, dclus4, c(.25, .5, .75))
+svyquantile(~MCNP, dclus4, c(.25, .5, .75))
+svyquantile(~MCOP, dclus4, c(.25, .5, .75))
+svyquantile(~MiNP, dclus4, c(.25, .5, .75))
+svyquantile(~MnMP, dclus4, c(.25, .5, .75))
+svyquantile(~T, dclus4, c(.25, .5, .75))
+
+# Female 6 - 12
+head(table2_groups[[4]])
+dclus5 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[4]])
+svyquantile(~MEHP, dclus5, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus5, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus5, c(.25, .5, .75))
+svyquantile(~MECPP, dclus5, c(.25, .5, .75))
+svyquantile(~MBzP, dclus5, c(.25, .5, .75))
+svyquantile(~MBP, dclus5, c(.25, .5, .75))
+svyquantile(~MiBP, dclus5, c(.25, .5, .75))
+svyquantile(~MEP, dclus5, c(.25, .5, .75))
+svyquantile(~MCPP, dclus5, c(.25, .5, .75))
+svyquantile(~MCNP, dclus5, c(.25, .5, .75))
+svyquantile(~MCOP, dclus5, c(.25, .5, .75))
+svyquantile(~MiNP, dclus5, c(.25, .5, .75))
+svyquantile(~MnMP, dclus5, c(.25, .5, .75))
+svyquantile(~T, dclus5, c(.25, .5, .75))
+
+# Female 60 -80
+head(table2_groups[[5]])
+dclus6 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[5]])
+svyquantile(~MEHP, dclus6, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus6, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus6, c(.25, .5, .75))
+svyquantile(~MECPP, dclus6, c(.25, .5, .75))
+svyquantile(~MBzP, dclus6, c(.25, .5, .75))
+svyquantile(~MBP, dclus6, c(.25, .5, .75))
+svyquantile(~MiBP, dclus6, c(.25, .5, .75))
+svyquantile(~MEP, dclus6, c(.25, .5, .75))
+svyquantile(~MCPP, dclus6, c(.25, .5, .75))
+svyquantile(~MCNP, dclus6, c(.25, .5, .75))
+svyquantile(~MCOP, dclus6, c(.25, .5, .75))
+svyquantile(~MiNP, dclus6, c(.25, .5, .75))
+svyquantile(~MnMP, dclus6, c(.25, .5, .75))
+svyquantile(~T, dclus6, c(.25, .5, .75))
+
+# Male 12 - 20
+head(table2_groups[[6]])
+dclus7 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[6]])
+svyquantile(~MEHP, dclus7, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus7, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus7, c(.25, .5, .75))
+svyquantile(~MECPP, dclus7, c(.25, .5, .75))
+svyquantile(~MBzP, dclus7, c(.25, .5, .75))
+svyquantile(~MBP, dclus7, c(.25, .5, .75))
+svyquantile(~MiBP, dclus7, c(.25, .5, .75))
+svyquantile(~MEP, dclus7, c(.25, .5, .75))
+svyquantile(~MCPP, dclus7, c(.25, .5, .75))
+svyquantile(~MCNP, dclus7, c(.25, .5, .75))
+svyquantile(~MCOP, dclus7, c(.25, .5, .75))
+svyquantile(~MiNP, dclus7, c(.25, .5, .75))
+svyquantile(~MnMP, dclus7, c(.25, .5, .75))
+svyquantile(~T, dclus7, c(.25, .5, .75))
+
+# Male 20 -40
+head(table2_groups[[7]])
+dclus8 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[7]])
+svyquantile(~MEHP, dclus8, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus8, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus8, c(.25, .5, .75))
+svyquantile(~MECPP, dclus8, c(.25, .5, .75))
+svyquantile(~MBzP, dclus8, c(.25, .5, .75))
+svyquantile(~MBP, dclus8, c(.25, .5, .75))
+svyquantile(~MiBP, dclus8, c(.25, .5, .75))
+svyquantile(~MEP, dclus8, c(.25, .5, .75))
+svyquantile(~MCPP, dclus8, c(.25, .5, .75))
+svyquantile(~MCNP, dclus8, c(.25, .5, .75))
+svyquantile(~MCOP, dclus8, c(.25, .5, .75))
+svyquantile(~MiNP, dclus8, c(.25, .5, .75))
+svyquantile(~MnMP, dclus8, c(.25, .5, .75))
+svyquantile(~T, dclus8, c(.25, .5, .75))
+
+# Male 40 -60
+head(table2_groups[[8]])
+dclus9 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[8]])
+svyquantile(~MEHP, dclus9, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus9, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus9, c(.25, .5, .75))
+svyquantile(~MECPP, dclus9, c(.25, .5, .75))
+svyquantile(~MBzP, dclus9, c(.25, .5, .75))
+svyquantile(~MBP, dclus9, c(.25, .5, .75))
+svyquantile(~MiBP, dclus9, c(.25, .5, .75))
+svyquantile(~MEP, dclus9, c(.25, .5, .75))
+svyquantile(~MCPP, dclus9, c(.25, .5, .75))
+svyquantile(~MCNP, dclus9, c(.25, .5, .75))
+svyquantile(~MCOP, dclus9, c(.25, .5, .75))
+svyquantile(~MiNP, dclus9, c(.25, .5, .75))
+svyquantile(~MnMP, dclus9, c(.25, .5, .75))
+svyquantile(~T, dclus9, c(.25, .5, .75))
+
+# Male 6-12
+head(table2_groups[[9]])
+dclus10 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[9]])
+svyquantile(~MEHP, dclus10, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus10, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus10, c(.25, .5, .75))
+svyquantile(~MECPP, dclus10, c(.25, .5, .75))
+svyquantile(~MBzP, dclus10, c(.25, .5, .75))
+svyquantile(~MBP, dclus10, c(.25, .5, .75))
+svyquantile(~MiBP, dclus10, c(.25, .5, .75))
+svyquantile(~MEP, dclus10, c(.25, .5, .75))
+svyquantile(~MCPP, dclus10, c(.25, .5, .75))
+svyquantile(~MCNP, dclus10, c(.25, .5, .75))
+svyquantile(~MCOP, dclus10, c(.25, .5, .75))
+svyquantile(~MiNP, dclus10, c(.25, .5, .75))
+svyquantile(~MnMP, dclus10, c(.25, .5, .75))
+svyquantile(~T, dclus10, c(.25, .5, .75))
+
+# Male 60 - 80
+head(table2_groups[[10]])
+dclus11 = svydesign(id = ~SEQN, weights = ~WTSA2YR, data = table2_groups[[10]])
+svyquantile(~MEHP, dclus11, c(.25, .5, .75))
+svyquantile(~MEHHP, dclus11, c(.25, .5, .75))
+svyquantile(~MEOHP, dclus11, c(.25, .5, .75))
+svyquantile(~MECPP, dclus11, c(.25, .5, .75))
+svyquantile(~MBzP, dclus11, c(.25, .5, .75))
+svyquantile(~MBP, dclus11, c(.25, .5, .75))
+svyquantile(~MiBP, dclus11, c(.25, .5, .75))
+svyquantile(~MEP, dclus11, c(.25, .5, .75))
+svyquantile(~MCPP, dclus11, c(.25, .5, .75))
+svyquantile(~MCNP, dclus11, c(.25, .5, .75))
+svyquantile(~MCOP, dclus11, c(.25, .5, .75))
+svyquantile(~MiNP, dclus11, c(.25, .5, .75))
+svyquantile(~MnMP, dclus11, c(.25, .5, .75))
+svyquantile(~T, dclus11, c(.25, .5, .75))
+
 ```
 
