@@ -99,7 +99,7 @@ Obese & $141(21.6)$ & \\
 table_1 = survey_df %>%
   select(SEQN,  sex, age_group, age, race, PIR, BMI, child_BMI)
 table_1 %>% count(age_group) 
-table_1 %>% count(sex) 
+table_1 %>% count(sex)
 table_1 %>% count(race) 
 table_1 %>% drop_na(child_BMI) %>% count(child_BMI) 
 ```
